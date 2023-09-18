@@ -1,26 +1,59 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { ReactNode } from "react";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
+import Signup from "./pages/signup/Signup";
+import Login from "./pages/login/Login";
+import Password from "./pages/password/Password";
+import Dashboard from "./pages/dashboard/Dashboard";
+import { useAuth } from "./context/AuthContext";
 
-function App() {
+interface ProtectedRouteProps {
+  children: ReactNode;
+}
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  if (!user) {
+    navigate("/login");
+    return null;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      {children}
+    </React.Fragment>
   );
+};
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <React.Fragment>
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/password" element={<Password />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="/" element={<Navigate to="/login" replace />} />
+    </React.Fragment>
+  )
+);
+
+function App(): JSX.Element {
+  return <RouterProvider router={router} />;
 }
 
 export default App;
