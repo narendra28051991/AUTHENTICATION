@@ -1,13 +1,47 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { ChangeEvent, FormEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { create } from 'zustand';
 import useSignup from '../../hooks/useSignup';
 
+type SignupStore = {
+  userType: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  setUserType: (type: string) => void;
+  setFirstName: (name: string) => void;
+  setLastName: (name: string) => void;
+  setEmail: (email: string) => void;
+  setPassword: (password: string) => void;
+};
+
+const useSignupStore = create<SignupStore>((set) => ({
+  userType: 'Student',
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  setUserType: (type) => set({ userType: type }),
+  setFirstName: (name) => set({ firstName: name }),
+  setLastName: (name) => set({ lastName: name }),
+  setEmail: (email) => set({ email: email }),
+  setPassword: (password) => set({ password: password }),
+}));
+
 const Signup: React.FC = () => {
-  const [userType, setUserType] = useState<string>('Student');
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const {
+    userType,
+    setUserType,
+    firstName,
+    setFirstName,
+    lastName,
+    setLastName,
+    email,
+    setEmail,
+    password,
+    setPassword,
+  } = useSignupStore();
 
   const { signup, error } = useSignup();
 

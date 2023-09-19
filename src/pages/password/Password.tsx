@@ -1,20 +1,40 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { ChangeEvent, FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { auth, sendPasswordResetEmail } from '../../firebase/config';
+import { create } from 'zustand';
+
+type PasswordStore = {
+  email: string;
+  error: string | null;
+  successMessage: string | null;
+  setEmail: (email: string) => void;
+  setError: (error: string | null) => void;
+  setSuccessMessage: (message: string | null) => void;
+};
+
+const usePasswordStore = create<PasswordStore>((set) => ({
+  email: '',
+  error: null,
+  successMessage: null,
+  setEmail: (email) => set({ email }),
+  setError: (error) => set({ error }),
+  setSuccessMessage: (message) => set({ successMessage: message }),
+}));
 
 const Password: React.FC = () => {
-  const [email, setEmail] = useState<string>('');
+  const { email, setEmail, error, setError, successMessage, setSuccessMessage } = usePasswordStore();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     try {
       await sendPasswordResetEmail(auth, email);
-
-      console.log('Password reset email sent. Check your inbox.');
+      setError(null);
+      setSuccessMessage('Password reset email sent. Check your inbox.');
     }
-    catch (error) {
-      console.error('Error sending password reset email:', error);
+    catch (err: any) {
+      setError(err.message);
+      setSuccessMessage(null);
     }
   };
 
@@ -39,6 +59,9 @@ const Password: React.FC = () => {
       <p>
         <Link to="/login">Go Back to Login</Link>
       </p>
+
+      {successMessage && <p className="success-message">{successMessage}</p>}
+      {error && <p className="error-message">{error}</p>}
     </form>
   );
 };

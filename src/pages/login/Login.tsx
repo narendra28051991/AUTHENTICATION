@@ -1,33 +1,34 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import React, { ChangeEvent, FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { create } from 'zustand';
 import useLogin from '../../hooks/useLogin';
 
-const Login: React.FC = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [rememberMe, setRememberMe] = useState<boolean>(false);
+type LoginStore = {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+  setEmail: (email: string) => void;
+  setPassword: (password: string) => void;
+  setRememberMe: (remember: boolean) => void;
+};
 
+const useLoginStore = create<LoginStore>((set) => ({
+  email: localStorage.getItem('rememberedEmail') || '',
+  password: '',
+  rememberMe: localStorage.getItem('rememberedEmail') ? true : false,
+  setEmail: (email) => set({ email }),
+  setPassword: (password) => set({ password }),
+  setRememberMe: (rememberMe) => set({ rememberMe })
+}));
+
+const Login: React.FC = () => {
+  const { email, setEmail, password, setPassword, rememberMe, setRememberMe } = useLoginStore();
   const { login, error } = useLogin();
   const navigate = useNavigate();
-
-  // Check if the user is already authenticated based on localStorage
-  useEffect(() => {
-    const storedEmail = localStorage.getItem('rememberedEmail');
-    if (storedEmail) {
-      setEmail(storedEmail);
-      setRememberMe(true);
-    }
-  }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     await login(email, password, rememberMe);
-
-    if (rememberMe) {
-      localStorage.setItem('rememberedEmail', email);
-    } else {
-      localStorage.removeItem('rememberedEmail');
-    }
 
     navigate('/dashboard');
   };
