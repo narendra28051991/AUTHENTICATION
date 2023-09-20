@@ -115,10 +115,6 @@ const Signup: React.FC = () => {
         />
       </label>
 
-      <p>
-        Already have an account? <Link to="/login">Sign in</Link>
-      </p>
-
       <button className="btn" type="submit">
         Sign up
       </button>

@@ -4,8 +4,6 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
-  setPersistence,
-  browserSessionPersistence,
   sendPasswordResetEmail,
   sendEmailVerification
 } from 'firebase/auth';
@@ -27,8 +25,6 @@ export {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
-  setPersistence,
-  browserSessionPersistence,
   sendPasswordResetEmail,
   sendEmailVerification
 };

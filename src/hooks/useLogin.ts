@@ -1,14 +1,21 @@
-import { useState } from 'react';
-import { auth, signInWithEmailAndPassword, setPersistence, browserSessionPersistence } from '../firebase/config';
+import { create } from 'zustand';
+import { auth, signInWithEmailAndPassword } from '../firebase/config';
+
+type LoginState = {
+  error: string | null;
+  setError: (error: string | null) => void;
+};
+
+const useLoginState = create<LoginState>((set) => ({
+  error: null,
+  setError: (error) => set({ error }),
+}));
 
 const useLogin = () => {
-  const [error, setError] = useState<string | null>(null);
+  const { error, setError } = useLoginState();
 
   const login = async (email: string, password: string, rememberMe: boolean) => {
     try {
-      if (rememberMe) {
-        await setPersistence(auth, browserSessionPersistence);
-      }
       await signInWithEmailAndPassword(auth, email, password);
       setError(null);
     }

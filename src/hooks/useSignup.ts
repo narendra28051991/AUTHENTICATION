@@ -1,8 +1,18 @@
-import { useState } from 'react';
+import { create } from 'zustand';
 import { auth, createUserWithEmailAndPassword, sendEmailVerification } from '../firebase/config';
 
+type LogoutState = {
+  error: string | null;
+  setError: (error: string | null) => void;
+};
+
+const useLogoutState = create<LogoutState>((set) => ({
+  error: null,
+  setError: (error) => set({ error }),
+}));
+
 const useSignup = () => {
-  const [error, setError] = useState<string | null>(null);
+  const { error, setError } = useLogoutState();
 
   const signup = async (email: string, password: string) => {
     try {

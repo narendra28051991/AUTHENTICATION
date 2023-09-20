@@ -1,9 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { User } from 'firebase/auth';
 import { auth, onAuthStateChanged } from '../firebase/config';
+import { create } from 'zustand';
+
+type AuthStore = {
+  user: User | null;
+  setUser: (user: User | null) => void;
+}
+
+const useAuthStore = create<AuthStore>((set) => ({
+  user: null,
+  setUser: (user) => set({ user }),
+}));
 
 const useAuthState = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, setUser } = useAuthStore();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (authUser) => {
@@ -15,7 +26,7 @@ const useAuthState = () => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [setUser]);
 
   return user;
 };

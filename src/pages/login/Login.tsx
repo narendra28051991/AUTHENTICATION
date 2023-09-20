@@ -10,26 +10,38 @@ type LoginStore = {
   setEmail: (email: string) => void;
   setPassword: (password: string) => void;
   setRememberMe: (remember: boolean) => void;
+  resetForm: () => void;
 };
 
 const useLoginStore = create<LoginStore>((set) => ({
   email: localStorage.getItem('rememberedEmail') || '',
   password: '',
-  rememberMe: localStorage.getItem('rememberedEmail') ? true : false,
+  rememberMe: false,
   setEmail: (email) => set({ email }),
   setPassword: (password) => set({ password }),
-  setRememberMe: (rememberMe) => set({ rememberMe })
+  setRememberMe: (rememberMe) => {
+    set((state) => {
+      if (rememberMe === true) {
+        localStorage.setItem('rememberedEmail', state.email);
+      }
+      else {
+        localStorage.removeItem('rememberedEmail');
+      }
+      return { ...state, rememberMe };
+    });
+  },
+  resetForm: () => set({ email: '', password: '', rememberMe: false })
 }));
 
 const Login: React.FC = () => {
-  const { email, setEmail, password, setPassword, rememberMe, setRememberMe } = useLoginStore();
+  const { email, setEmail, password, setPassword, rememberMe, setRememberMe, resetForm } = useLoginStore();
   const { login, error } = useLogin();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     await login(email, password, rememberMe);
-
+    rememberMe ? setPassword('') : resetForm();
     navigate('/dashboard');
   };
 
