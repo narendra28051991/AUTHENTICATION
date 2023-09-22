@@ -3,16 +3,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { create } from 'zustand';
 import useLogin from '../../hooks/useLogin';
 import { useAuthContext } from '../../hooks/useAuthContext';
-
-type LoginStore = {
-  email: string;
-  password: string;
-  rememberMe: boolean;
-  setEmail: (email: string) => void;
-  setPassword: (password: string) => void;
-  setRememberMe: (remember: boolean) => void;
-  resetForm: () => void;
-};
+import { LoginStore } from '../../types/component';
 
 const useLoginStore = create<LoginStore>((set) => ({
   email: localStorage.getItem('rememberedEmail') || '',

@@ -2,19 +2,7 @@ import React, { ChangeEvent, FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { create } from 'zustand';
 import useSignup from '../../hooks/useSignup';
-
-type SignupStore = {
-  userType: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  setUserType: (type: string) => void;
-  setFirstName: (name: string) => void;
-  setLastName: (name: string) => void;
-  setEmail: (email: string) => void;
-  setPassword: (password: string) => void;
-};
+import { SignupStore } from '../../types/component';
 
 const useSignupStore = create<SignupStore>((set) => ({
   userType: 'Student',

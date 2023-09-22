@@ -1,41 +1,22 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { auth, sendPasswordResetEmail } from '../../firebase/config';
 import { create } from 'zustand';
-
-type PasswordStore = {
-  email: string;
-  error: string | null;
-  successMessage: string | null;
-  setEmail: (email: string) => void;
-  setError: (error: string | null) => void;
-  setSuccessMessage: (message: string | null) => void;
-};
+import useReset from '../../hooks/useReset';
+import { PasswordStore } from '../../types/component';
 
 const usePasswordStore = create<PasswordStore>((set) => ({
   email: '',
-  error: null,
-  successMessage: null,
   setEmail: (email) => set({ email }),
-  setError: (error) => set({ error }),
-  setSuccessMessage: (message) => set({ successMessage: message }),
 }));
 
 const Password: React.FC = () => {
-  const { email, setEmail, error, setError, successMessage, setSuccessMessage } = usePasswordStore();
+  const { email, setEmail } = usePasswordStore();
+  const { resetPassword, error, successMessage } = useReset()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    try {
-      await sendPasswordResetEmail(auth, email);
-      setError(null);
-      setSuccessMessage('Password reset email sent. Check your inbox.');
-    }
-    catch (err: any) {
-      setError(err.message);
-      setSuccessMessage(null);
-    }
+    await resetPassword(email);
   };
 
   return (

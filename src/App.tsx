@@ -18,36 +18,22 @@ function App(): JSX.Element {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <React.Fragment>
-        {
-          !user
-          ? <Route path="/" element={<Navigate to="/login" replace />} />
-          : <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        }
-        {
-          !user
-          ? <Route path="/signup" element={<Signup />} />
-          : <Route path="/signup" element={<Dashboard />} />
-        }
-        {
-          !user
-          ? <Route path="/login" element={<Login />} />
-          : <Route path="/login" element={<Dashboard />} />
-        }
-        {
-          !user
-          ? <Route path="/password" element={<Password />} />
-          : <Route path="/password" element={<Dashboard />} />
-        }
-        {
-          !user
-          ? <Route path="/dashboard" element={<Login />} />
-          : <Route path="/dashboard" element={<Dashboard />} />
-        }
+        <Route
+          path="/"
+          element={user ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />}
+        />
+        <Route path="/signup" element={user ? <Navigate to="/dashboard" replace /> : <Signup />} />
+        <Route path="/login" element={user ? <Navigate to="/dashboard" replace /> : <Login />} />
+        <Route
+          path="/password"
+          element={user ? <Navigate to="/dashboard" replace /> : <Password />}
+        />
+        <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" replace />} />
       </React.Fragment>
     )
   );
 
   return <RouterProvider router={router} />;
-};
+}
 
 export default App;

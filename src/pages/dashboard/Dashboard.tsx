@@ -1,14 +1,11 @@
 import React from 'react';
 import useLogout from '../../hooks/useLogout';
-import { Navigate, useNavigate } from 'react-router-dom';
 
 const Dashboard: React.FC = () => {
-  const navigate = useNavigate();
   const logout = useLogout();
 
   const handleLogout = async (): Promise<void> => {
     await logout();
-    navigate('/login');
   };
 
   return (

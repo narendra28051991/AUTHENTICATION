@@ -1,12 +1,7 @@
 import { createContext, ReactNode, useEffect } from 'react';
-import { User } from 'firebase/auth';
 import { auth, onAuthStateChanged } from '../firebase/config';
 import { create } from 'zustand';
-
-export type AuthContextStore = {
-  user: User | null;
-  setUser: (user: User | null) => void;
-}
+import { AuthContextStore } from '../types';
 
 const useAuthContextStore = create<AuthContextStore>((set) => ({
   user: null,
