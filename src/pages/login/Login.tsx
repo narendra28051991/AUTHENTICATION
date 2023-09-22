@@ -1,7 +1,8 @@
 import React, { ChangeEvent, FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { create } from 'zustand';
 import useLogin from '../../hooks/useLogin';
+import { useAuthContext } from '../../hooks/useAuthContext';
 
 type LoginStore = {
   email: string;
@@ -34,6 +35,7 @@ const useLoginStore = create<LoginStore>((set) => ({
 }));
 
 const Login: React.FC = () => {
+  const { user } = useAuthContext()
   const { email, setEmail, password, setPassword, rememberMe, setRememberMe, resetForm } = useLoginStore();
   const { login, error } = useLogin();
   const navigate = useNavigate();
@@ -44,6 +46,10 @@ const Login: React.FC = () => {
     rememberMe ? setPassword('') : resetForm();
     navigate('/dashboard');
   };
+
+  if (user) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   return (
     <form onSubmit={handleSubmit}>

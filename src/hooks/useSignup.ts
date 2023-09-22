@@ -1,18 +1,18 @@
 import { create } from 'zustand';
 import { auth, createUserWithEmailAndPassword, sendEmailVerification } from '../firebase/config';
 
-type LogoutState = {
+type SignupState = {
   error: string | null;
   setError: (error: string | null) => void;
 };
 
-const useLogoutState = create<LogoutState>((set) => ({
+const useSignupState = create<SignupState>((set) => ({
   error: null,
   setError: (error) => set({ error }),
 }));
 
 const useSignup = () => {
-  const { error, setError } = useLogoutState();
+  const { error, setError } = useSignupState();
 
   const signup = async (email: string, password: string) => {
     try {
