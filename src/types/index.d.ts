@@ -1,16 +1,16 @@
 import { User } from 'firebase/auth';
 
-export type AuthContextStore = {
+export interface AuthContextStore {
   user: User | null;
   setUser: (user: User | null) => void;
 }
 
-export type LoginSignupState = {
+export interface LoginSignupState {
   error: string | null;
   setError: (error: string | null) => void;
 };
 
-export type ResetState = {
+export interface ResetState {
   error: string | null;
   successMessage: string | null;
   setError: (error: string | null) => void;

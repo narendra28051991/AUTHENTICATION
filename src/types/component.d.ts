@@ -1,4 +1,4 @@
-export type LoginStore = {
+export interface LoginStore {
   email: string;
   password: string;
   rememberMe: boolean;
@@ -8,12 +8,12 @@ export type LoginStore = {
   resetForm: () => void;
 };
 
-export type PasswordStore = {
+export interface PasswordStore {
   email: string;
   setEmail: (email: string) => void;
 };
 
-export type SignupStore = {
+export interface SignupStore {
   userType: string;
   firstName: string;
   lastName: string;
