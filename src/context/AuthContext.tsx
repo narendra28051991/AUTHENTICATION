@@ -15,10 +15,11 @@ export const AuthContextProvider: React.FC<{ children: ReactNode }> = ({ childre
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-      if (authUser) {
+      if (authUser?.emailVerified) {
         setUser(authUser);
       } else {
         setUser(null);
+        auth.signOut;
       }
     });
 

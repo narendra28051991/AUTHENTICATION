@@ -14,21 +14,22 @@ import { useAuthContext } from "./hooks/useAuthContext";
 
 function App(): JSX.Element {
   const { user } = useAuthContext();
+  const verifiesUser = user?.emailVerified
 
   const router = createBrowserRouter(
     createRoutesFromElements(
       <React.Fragment>
         <Route
           path="/"
-          element={user ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />}
+          element={verifiesUser ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />}
         />
-        <Route path="/signup" element={user ? <Navigate to="/dashboard" replace /> : <Signup />} />
-        <Route path="/login" element={user ? <Navigate to="/dashboard" replace /> : <Login />} />
+        <Route path="/signup" element={verifiesUser ? <Navigate to="/dashboard" replace /> : <Signup />} />
+        <Route path="/login" element={verifiesUser ? <Navigate to="/dashboard" replace /> : <Login />} />
         <Route
           path="/password"
-          element={user ? <Navigate to="/dashboard" replace /> : <Password />}
+          element={verifiesUser ? <Navigate to="/dashboard" replace /> : <Password />}
         />
-        <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" replace />} />
+        <Route path="/dashboard" element={verifiesUser ? <Dashboard /> : <Navigate to="/login" replace />} />
       </React.Fragment>
     )
   );
